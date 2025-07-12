@@ -1,11 +1,23 @@
-version: '3'
+version: '3.8'
 services:
-  task-service:
-    build: ./task-service
-    ports:
-      - "3001:3001"
-
   auth-service:
     build: ./auth-service
     ports:
       - "3002:3002"
+    environment:
+      - PORT=3002
+      - JWT_SECRET=YourSuperTigerSecret
+
+  task-service:
+    build: ./task-service
+    ports:
+      - "3003:3003"
+    environment:
+      - PORT=3003
+
+  frontend-service:
+    build: ./frontend-service
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:3002
