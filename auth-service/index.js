@@ -8,19 +8,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Root route
+// Health check
 app.get('/', (req, res) => {
   res.send('✅ Auth service is alive!');
 });
 
-// Health check
-app.get('/healthz', (req, res) => {
-  res.status(200).send('OK');
+app.get('/help', (req, res) => {
+  res.send('🛠 This service supports /register and /login');
 });
 
-// Help page
-app.get('/help', (req, res) => {
-  res.send('🛠 Need help? This service supports /register and /login.');
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
 });
 
 // Register new user
@@ -31,7 +29,7 @@ app.post('/register', async (req, res) => {
 
   try {
     const hashed = await bcrypt.hash(password, 10);
-    // Normally you'd store this in a DB
+    // Replace with DB logic later
     res.status(201).json({ username, hash: hashed });
   } catch (err) {
     res.status(500).send('Registration failed.');
@@ -44,7 +42,7 @@ app.post('/login', async (req, res) => {
   if (!username || !password)
     return res.status(400).send('Missing credentials.');
 
-  // Fake validation for demo (replace with DB lookup in production)
+  // Replace with real user validation
   const dummyPassword = 'password123';
   const isValid = await bcrypt.compare(password, await bcrypt.hash(dummyPassword, 10));
   if (!isValid)
@@ -56,8 +54,8 @@ app.post('/login', async (req, res) => {
   res.json({ token });
 });
 
-// Catch-all route
-app.get('*', (req, res) => {
+// Catch-all route (Express v5-compatible)
+app.all('/{*catchall}', (req, res) => {
   res.status(404).send('❌ Route not found.');
 });
 
