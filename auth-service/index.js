@@ -9,8 +9,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const users = [];
-const SECRET = "LSUTigerSecret";
+const SECRET = process.env.JWT_SECRET || "LSUTigerSecret";
 
+// Registration route
 app.post("/register", (req, res) => {
   const { username, password } = req.body;
   const hashed = bcrypt.hashSync(password, 8);
@@ -18,6 +19,7 @@ app.post("/register", (req, res) => {
   res.status(201).json({ message: "Registered successfully" });
 });
 
+// Login route
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   const user = users.find(u => u.username === username);
@@ -28,4 +30,6 @@ app.post("/login", (req, res) => {
   res.json({ token });
 });
 
-app.listen(3002, () => console.log("Auth service running on port 3002"));
+// Use dynamic port
+const PORT = process.env.PORT || 3002;
+app.listen(PORT, () => console.log(`Auth service running on port ${PORT}`));

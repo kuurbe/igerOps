@@ -1,0 +1,9 @@
+# Node.js Essentials
+node_modules/
+.env
+*.log
+
+# System Noise
+.DS_Store
+Thumbs.db
+AppData/
